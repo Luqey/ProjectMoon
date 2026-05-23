@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class Grid {
-  public static readonly int size = 16;
+  public static readonly int size = 48;
 
   public static Vector2 FromGrid(Vector2Int pos) {
     return pos * size;
