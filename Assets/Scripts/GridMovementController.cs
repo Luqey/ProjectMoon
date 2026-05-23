@@ -1,135 +1,90 @@
 using System;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Math = Moon.Math;
+
+public static class Facing {
+  public static Vector2Int North => new(0, 1);
+  public static Vector2Int NorthEast => new(1, 1);
+  public static Vector2Int East => new(1, 0);
+  public static Vector2Int SouthEast => new(1, -1);
+  public static Vector2Int South => new(0, -1);
+  public static Vector2Int SouthWest => new(-1, -1);
+  public static Vector2Int West => new(-1, 0);
+  public static Vector2Int NorthWest => new(-1, 1);
+  public static Vector2Int GetFacingDirection(int facing) {
+
+    return Math.Mod(facing, 8) switch {
+      0 => North,
+      1 => NorthEast,
+      2 => East,
+      3 => SouthEast,
+      4 => South,
+      5 => SouthWest,
+      6 => West,
+      7 => NorthWest,
+      _ => throw new Exception("Literally impossible!")
+    };
+  }
+
+  public static int Turn(int facing, int right) {
+    return Math.Mod(facing + right, 8);
+  }
+
+  public static int Reverse(int facing) {
+    return Math.Mod(facing + 4, 8);
+  }
+
+  public static int Resolve(int facing, int forward) {
+    return forward > 0 ? facing : Reverse(facing);
+  }
+}
+
+
+public abstract record ActionOutcome(Vector2Int Position);
+public sealed record Turn(Vector2Int Position, int From, int To, int Delta) : ActionOutcome(Position);
+public sealed record Stride(Vector2Int Position, Vector2Int From) : ActionOutcome(Position);
+public sealed record Bump(Vector2Int Position, int Facing, int Forward, RaycastHit Hit) : ActionOutcome(Position);
+public sealed record None(Vector2Int Position) : ActionOutcome(Position);
 
 public class GridMovementController : MonoBehaviour {
   private Vector2Int gridPosition;
-  public float walkTime = 0.3f;
-  public float turnTime = 0.2f;
-  public float bumpForwardTime = 0.15f;
-  public float bumpBackwardTime = 0.1f;
-  public float bumpDistance = 0.5f;
+  public Vector2Int Position => gridPosition;
+  private int facing;
+
+  public int eyeHeight = 14;
+
   [SerializeField] private LayerMask colliderMask;
-  [SerializeField] private InputActionReference moveAction;
-  [SerializeField] private TurnManager turnManager;
-
-  private UniTask moveChain = UniTask.CompletedTask;
-  private double lastInputTimestamp;
-
-  public Action<float, Vector2Int> walking;
-  public Action<float> turning;
-  public Action<float, RaycastHit> bumping;
 
   void Start() {
     // Snap to grid on start
     gridPosition = Grid.ToGrid(transform.position);
-    var angle = Mathf.FloorToInt(transform.rotation.eulerAngles.y / 45) * 45;
+    facing = Mathf.FloorToInt(transform.rotation.eulerAngles.y / 45);
     transform.SetPositionAndRotation(
       Grid.FromGrid(gridPosition, withY: transform.position.y),
-      Quaternion.Euler(0, angle, 0)
+      Quaternion.Euler(0, facing * 45, 0)
     );
   }
 
-  void OnEnable() {
-    moveAction.action.performed += OnMove;
-    moveAction.action.canceled += OnMove;
-  }
-
-  void OnDisable() {
-    moveAction.action.performed -= OnMove;
-    moveAction.action.canceled -= OnMove;
-  }
-
-  void OnMove(InputAction.CallbackContext context) {
-    var inputTime = context.time;
-    lastInputTimestamp = inputTime;
-    var input = context.ReadValue<Vector2>();
-    if (input.sqrMagnitude > 0) {
-      moveChain = moveChain.ContinueWith(() => Move(input, inputTime));
-    }
-  }
-
-  async UniTask Move(Vector2 direction, double inputTime) {
-    Debug.Log(direction);
-    if (!enabled) return;
-
-    if (direction.y != 0) {
-      await Walk(Math.Sign(direction.y));
-    }
+  public ActionOutcome OnMove(Vector2 direction) {
     if (direction.x != 0) {
-      await Turn(Math.Sign(direction.x));
+      var from = facing;
+      var right = Math.Sign(direction.x);
+      facing = Facing.Turn(facing, right);
+      return new Turn(gridPosition, from, facing, right);
     }
-
-    // If the input time hasn't changed in the meantime, keep moving (button is held)
-    if (direction.sqrMagnitude > 0 && lastInputTimestamp == inputTime) {
-      await Move(direction, inputTime);
-    }
-    if (destroyCancellationToken.IsCancellationRequested) return;
-  }
-
-  async UniTask Walk(int forward) {
-    var direction = forward * transform.forward;
-    var halfHeightPosition = Vector3.Scale(transform.position, new Vector3(1, 0.5f, 1));
-    var gridDelta = new Vector2Int(Mathf.RoundToInt(direction.x), Mathf.RoundToInt(direction.z));
-    if (Physics.Raycast(halfHeightPosition, direction, out var hit, Grid.size * gridDelta.magnitude, colliderMask)) {
-      turnManager.EndPlayerTurn(new() {playerPosition = gridPosition});
-      await Bump(forward, hit);
-    } else {
-      gridPosition += gridDelta;
-      turnManager.EndPlayerTurn(new() {playerPosition = gridPosition});
-      await Stride(gridDelta);
-    }
-  }
-
-  async UniTask Stride(Vector2Int delta) {
-      var startPosition = transform.position;
-      var target = Grid.FromGrid(gridPosition, withY: transform.position.y);
-      var elapsed = 0f;
-      var scaledWalkTime = walkTime * delta.magnitude;
-      while (elapsed < scaledWalkTime) {
-        walking?.Invoke(elapsed / walkTime, gridPosition);
-        elapsed += Time.deltaTime;
-        transform.position = Vector3.Lerp(startPosition, target, elapsed / scaledWalkTime);
-        await UniTask.NextFrame();
-        if (destroyCancellationToken.IsCancellationRequested) break;
+    if (direction.y != 0) {
+      var forward = Math.Sign(direction.y);
+      var gridDelta = Facing.GetFacingDirection(Facing.Resolve(facing, forward));
+      var eyePosition = Grid.FromGrid(gridPosition, withY: transform.position.y) + new Vector3(0, eyeHeight, 0);
+      if (Physics.Raycast(eyePosition, new Vector3(gridDelta.x, 0, gridDelta.y), out var hit, Grid.size * gridDelta.magnitude, colliderMask)) {
+        return new Bump(gridPosition, facing, forward, hit);
+      } else {
+        var from = gridPosition;
+        gridPosition += gridDelta;
+        return new Stride(gridPosition, from);
       }
-      walking?.Invoke(1f, gridPosition);
-  }
-
-  async UniTask Turn(int right) {
-    var start = transform.rotation;
-    var target = transform.rotation * Quaternion.Euler(0, right * 45, 0);
-    var elapsed = 0f;
-    while (elapsed < turnTime) {
-      turning?.Invoke(elapsed / turnTime);
-      elapsed += Time.deltaTime;
-      transform.rotation = Quaternion.Lerp(start, target, elapsed / turnTime);
-      await UniTask.NextFrame();
-      if (destroyCancellationToken.IsCancellationRequested) break;
     }
-    turning?.Invoke(1f);
-  }
 
-  async UniTask Bump(int forward, RaycastHit hit) {
-    var direction = forward * transform.forward;
-    var gridDelta = new Vector2Int(Mathf.RoundToInt(direction.x), Mathf.RoundToInt(direction.z));
-    var bumpDelta = Vector3.Scale(Grid.FromGrid(gridDelta, transform.position.y), new Vector3(bumpDistance, 1, bumpDistance));
-    var startPosition = transform.position;
-    var target = startPosition + bumpDelta;
-    var elapsed = 0f;
-    var scaledBumpForwardTime = bumpForwardTime * gridDelta.magnitude;
-    var scaledBumpBackwardTime = bumpBackwardTime * gridDelta.magnitude;
-    var bumpTime = scaledBumpForwardTime + scaledBumpBackwardTime;
-    while (elapsed < bumpTime) {
-      var bumpForward = elapsed < scaledBumpForwardTime;
-      bumping?.Invoke(elapsed / bumpTime, hit);
-      elapsed += Time.deltaTime;
-      transform.position = Vector3.Lerp(bumpForward ? startPosition : target, bumpForward ? target : startPosition, elapsed / bumpTime);
-      await UniTask.NextFrame();
-      if (destroyCancellationToken.IsCancellationRequested) break;
-    }
-    bumping?.Invoke(1, hit);
+    return new None(gridPosition);
   }
 }

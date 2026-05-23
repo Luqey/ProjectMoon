@@ -12,7 +12,7 @@ public class Grid {
   }
 
   public static Vector2Int ToGrid(Vector3 pos) {
-    return new(Mathf.RoundToInt(pos.x / size), Mathf.RoundToInt(pos.y / size));
+    return new(Mathf.RoundToInt(pos.x / size), Mathf.RoundToInt(pos.z / size));
   }
 }
 

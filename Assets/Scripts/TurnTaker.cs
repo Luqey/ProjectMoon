@@ -5,15 +5,18 @@ public class GameState {
 }
 
 public abstract class TurnCounterAction : MonoBehaviour {
+  [SerializeField] private GridMovementController gridMovementController;
   [SerializeField] private int turnCounter;
   private int counter = 0;
 
-  protected abstract void TurnAction(GameState context);
+  protected abstract Vector2 TurnAction(GameState context);
 
-  public void Increment(GameState context) {
+  public ActionOutcome Increment(GameState context) {
+    var direction = Vector2.zero;
     counter += 1;
     if (counter % turnCounter == 0) {
-      TurnAction(context);
+      direction = TurnAction(context);
     }
+    return gridMovementController.OnMove(direction);
   }
 }

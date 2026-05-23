@@ -7,5 +7,9 @@ namespace Moon {
     public static int Sign(float x) {
       return x < 0f ? -1 : 1;
     }
+
+    public static int Mod(int x, int m) {
+      return (x % m + m) % m;
+    }
   }
 }
