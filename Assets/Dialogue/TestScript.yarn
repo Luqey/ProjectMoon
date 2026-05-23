@@ -1,0 +1,17 @@
+﻿title: TestScript
+---
+Player: Hello world!
+NPC: Meow
+->I'm hungry
+	NPC: eat something
+->I'm angry
+	NPC: stop
+->I'm evil
+	NPC: be nice
+	<<jump End>>
+===
+title: End
+---
+Player: ok
+NPC:Bye
+===
