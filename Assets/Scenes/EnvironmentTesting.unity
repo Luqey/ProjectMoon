@@ -295,11 +295,11 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.9995461
+    width: 1
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 34
+  field of view: 70
   orthographic: 0
   orthographic size: 90
   m_Depth: -1
@@ -851,7 +851,7 @@ Canvas:
   m_GameObject: {fileID: 1018009288}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 519420031}
   m_PlaneDistance: 50
   m_PixelPerfect: 0
