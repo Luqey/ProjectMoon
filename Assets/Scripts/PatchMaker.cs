@@ -47,9 +47,10 @@ public class PatchMaker : MonoBehaviour {
   }
 
   void ClearSpawned() {
-    for (var i = 0; i < transform.childCount; i += 1) {
+    for (var i = transform.childCount - 1; i >= 0; i -= 1) {
       var child = transform.GetChild(i);
       if (Application.isPlaying) {
+        Debug.Log("Should never be called");
         Destroy(child.gameObject);
       } else {
         DestroyImmediate(child.gameObject);
