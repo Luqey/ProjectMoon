@@ -15,6 +15,14 @@ public class TurnManager : MonoBehaviour {
   [SerializeField] private InputActionReference moveAction;
   [SerializeField] private GridMovementController playerMovementController;
   [SerializeField] private GridMovementAnimator playerMovementAnimator;
+
+  // How long do different actions take
+  [Header("Durations")]
+  [SerializeField] private float turnTime = 0.3f;
+  [SerializeField] private float strideTime = 0.3f;
+  [SerializeField] private float bumpTime = 0.4f;
+  [SerializeField] private float standTime = 0.4f;
+
   private double lastInputTime;
   private UniTask moveChain;
   private readonly List<TurnCounterAction> turnCounters = new();
@@ -48,19 +56,41 @@ public class TurnManager : MonoBehaviour {
     // Queue up all the things that need to process in order, now that the player has press a move button
     if (direction.sqrMagnitude > 0) {
       var outcome = playerMovementController.OnMove(direction);
-      var gameState = new GameState { playerPosition = outcome.Position };
-      var outcomes = turnCounters.Select((action) => (outcome: action.Increment(gameState), animator: action.GetComponent<GridMovementAnimator>()));
+      var timer = outcome switch {
+        Turn turn => turnTime,
+        Stride stride => strideTime,
+        Bump bump => bumpTime,
+        Stand => standTime,
+      };
 
-      var tasks = new[] { (outcome, animator: playerMovementAnimator) }.Concat(outcomes).Select((pair) => {
+      var gameState = new GameState { playerPosition = outcome.Position };
+      var outcomes = turnCounters.Select((action) => (outcome: action.Increment(gameState), gameObject: action.gameObject));
+
+      var animators = new[] { (outcome, gameObject: playerMovementAnimator.gameObject) }.Concat(outcomes).Select((pair) => {
+        if (!pair.gameObject.TryGetComponent<GridMovementAnimator>(out var animator)) {
+          return pair.outcome switch {
+            Turn turn => DefaultGridMovement.Turn(pair.gameObject.transform, turn.From, turn.Delta),
+            Stride stride => DefaultGridMovement.Stride(pair.gameObject.transform, stride.From, stride.Position),
+            Bump bump => DefaultGridMovement.Bump(pair.gameObject.transform, bump.Position, bump.Facing),
+            Stand => progress => { }
+          };
+        }
         return pair.outcome switch {
-          Turn turn => pair.animator.TurnTask(turn.From, turn.Delta),
-          Stride stride => pair.animator.StrideTask(stride.From, stride.Position),
-          Bump bump => pair.animator.BumpTask(bump.Position, bump.Facing),
-          None => UniTask.CompletedTask,
+          Turn turn => animator.Turn(turn.From, turn.Delta),
+          Stride stride => animator.Stride(stride.From, stride.Position),
+          Bump bump => animator.Bump(bump.Position, bump.Facing),
+          Stand => progress => { }
         };
       });
 
-      await UniTask.WhenAll(tasks);
+
+      var elapsed = 0f;
+      while (elapsed < timer) {
+        foreach (var animator in animators) animator(elapsed / timer);
+        await UniTask.NextFrame();
+        elapsed += Time.deltaTime;
+      }
+      foreach (var animator in animators) animator(1f);
     }
 
     // If the input time hasn't changed in the meantime, keep moving (button is held)

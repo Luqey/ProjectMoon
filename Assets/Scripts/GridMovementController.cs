@@ -44,7 +44,7 @@ public abstract record ActionOutcome(Vector2Int Position);
 public sealed record Turn(Vector2Int Position, int From, int To, int Delta) : ActionOutcome(Position);
 public sealed record Stride(Vector2Int Position, Vector2Int From) : ActionOutcome(Position);
 public sealed record Bump(Vector2Int Position, int Facing, int Forward, RaycastHit Hit) : ActionOutcome(Position);
-public sealed record None(Vector2Int Position) : ActionOutcome(Position);
+public sealed record Stand(Vector2Int Position) : ActionOutcome(Position);
 
 public class GridMovementController : MonoBehaviour {
   private Vector2Int gridPosition;
@@ -85,6 +85,6 @@ public class GridMovementController : MonoBehaviour {
       }
     }
 
-    return new None(gridPosition);
+    return new Stand(gridPosition);
   }
 }

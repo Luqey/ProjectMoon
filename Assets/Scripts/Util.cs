@@ -1,6 +1,4 @@
-namespace Moon
-{
-  public static class Util
-  {
+namespace Moon {
+  public static class Util {
   }
 }
