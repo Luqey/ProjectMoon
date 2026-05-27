@@ -47,19 +47,20 @@ public class TurnManager : MonoBehaviour {
 
     // Queue up all the things that need to process in order, now that the player has press a move button
     if (direction.sqrMagnitude > 0) {
-      var playerMoveOutcome = playerMovementController.OnMove(direction);
-      var gameState = new GameState { playerPosition = playerMoveOutcome.Position };
-      var outcomes = turnCounters.Select((action) => action.Increment(gameState));
-      // TODO: Put all the outcomes into one list and call all the animator tasks, then await them all together.
+      var outcome = playerMovementController.OnMove(direction);
+      var gameState = new GameState { playerPosition = outcome.Position };
+      var outcomes = turnCounters.Select((action) => (outcome: action.Increment(gameState), animator: action.GetComponent<GridMovementAnimator>()));
 
-      var playerAnimation = playerMoveOutcome switch {
-        Turn turn => playerMovementAnimator.TurnTask(turn.From, turn.Delta),
-        Stride stride => playerMovementAnimator.StrideTask(stride.From, stride.Position),
-        Bump bump => playerMovementAnimator.BumpTask(bump.Position, bump.Facing),
-        None => UniTask.CompletedTask,
-      };
+      var tasks = new[] { (outcome, animator: playerMovementAnimator) }.Concat(outcomes).Select((pair) => {
+        return pair.outcome switch {
+          Turn turn => pair.animator.TurnTask(turn.From, turn.Delta),
+          Stride stride => pair.animator.StrideTask(stride.From, stride.Position),
+          Bump bump => pair.animator.BumpTask(bump.Position, bump.Facing),
+          None => UniTask.CompletedTask,
+        };
+      });
 
-      await UniTask.WhenAll(new[] { playerAnimation });
+      await UniTask.WhenAll(tasks);
     }
 
     // If the input time hasn't changed in the meantime, keep moving (button is held)

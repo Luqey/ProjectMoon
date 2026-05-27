@@ -1,0 +1,35 @@
+views:
+  - type: kanban-view
+    name: Tasks
+    filters:
+      and:
+        - file.inFolder("tasks")
+    order: []
+    columnOrders:
+      note.status:
+        - Uncategorized
+        - todo
+        - in progress
+        - done
+    cardOrders:
+      file.file: {}
+      note.status:
+        Uncategorized:
+          - tasks/New Card.md
+          - tasks/test.md
+        todo:
+          - tasks/Create more environment art.md
+          - tasks/Create new Unity project.md
+          - tasks/Make a cool game.md
+        done:
+          - tasks/Movement queuing system.md
+          - tasks/Done.md
+    columnColors:
+      file.file: {}
+      note.status:
+        todo: red
+        done: green
+        in progress: yellow
+    groupByProperty: note.status
+    cardTitleProperty: file.name
+    quickAddFolder: tasks

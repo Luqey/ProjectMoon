@@ -1,0 +1,205 @@
+{
+  "main": {
+    "id": "56a68a92ab58169c",
+    "type": "split",
+    "children": [
+      {
+        "id": "ee6f98bc717dbdfc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e1150ddcd0b521b9",
+            "type": "leaf",
+            "state": {
+              "type": "bases",
+              "state": {
+                "file": "Kanban Board.base",
+                "viewName": "Tasks"
+              },
+              "icon": "columns",
+              "title": "Kanban Board"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "912fdf1b641e7ded",
+    "type": "split",
+    "children": [
+      {
+        "id": "d04ce7d1dfa4e5ed",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8593ef060e193302",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "a264775502e38817",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "c90db958a95e98d0",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "341ed255dcd1a27a",
+    "type": "split",
+    "children": [
+      {
+        "id": "98980fb35000bdf9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "468b42ac8637f044",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Kanban Board.base",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Kanban Board"
+            }
+          },
+          {
+            "id": "0b3cd6af86bd48bd",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Kanban Board.base",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Kanban Board"
+            }
+          },
+          {
+            "id": "0d41c408d7f73241",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "af3b97b4259dcc4a",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "35f355b04b033118",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Kanban Board.base",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Kanban Board"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 560.5,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "e1150ddcd0b521b9",
+  "lastOpenFiles": [
+    "tasks/Movement queuing system.md",
+    "Kanban Board.base",
+    "tasks/Untitled.md",
+    "tasks/Make Enemy AI.md",
+    "tasks/Done.md",
+    "tasks/Make a cool game.md",
+    "tasks/Create more environment art.md",
+    "tasks/Create new Unity project.md",
+    "tasks/New Card.md",
+    "tasks/test.md",
+    "tasks/nope.md",
+    "tasks",
+    "_",
+    "Todo/Test.md",
+    "Todo",
+    "Welcome.md"
+  ]
+}
