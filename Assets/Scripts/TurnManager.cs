@@ -59,17 +59,12 @@ public class TurnManager : MonoBehaviour {
       };
 
       var gameState = new GameState { playerPosition = outcome.Position };
-      var outcomes = turnCounters.Select((action) => (outcome: action.Increment(gameState), gameObject: action.gameObject));
+      var outcomes = turnCounters.Select((action) => (outcome: action.Increment(gameState), action.gameObject));
 
-      var animators = new[] { (outcome, gameObject: playerMovementAnimator.gameObject) }.Concat(outcomes).Select((pair) => {
-        if (!pair.gameObject.TryGetComponent<GridMovementAnimator>(out var animator)) {
-          return pair.outcome switch {
-            Turn turn => DefaultGridMovement.Turn(pair.gameObject.transform, turn.From, turn.Delta),
-            Stride stride => DefaultGridMovement.Stride(pair.gameObject.transform, stride.From, stride.Position),
-            Bump bump => DefaultGridMovement.Bump(pair.gameObject.transform, bump.Position, bump.Facing),
-            Stand => progress => { }
-          };
-        }
+      var animators = new[] { (outcome, playerMovementAnimator.gameObject) }.Concat(outcomes).Select((pair) => {
+        IGridMovementAnimator animator = pair.gameObject.GetComponent<GridMovementAnimator>();
+        animator ??= new DefaultGridMovementAnimator(pair.gameObject.transform);
+
         return pair.outcome switch {
           Turn turn => animator.Turn(turn.From, turn.Delta),
           Stride stride => animator.Stride(stride.From, stride.Position),

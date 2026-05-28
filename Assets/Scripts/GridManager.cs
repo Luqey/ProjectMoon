@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Grid {
+public static class Grid {
   public static readonly int size = 48;
 
   public static Vector2 FromGrid(Vector2Int pos) {
@@ -14,8 +14,4 @@ public class Grid {
   public static Vector2Int ToGrid(Vector3 pos) {
     return new(Mathf.RoundToInt(pos.x / size), Mathf.RoundToInt(pos.z / size));
   }
-}
-
-public class GridManager : MonoBehaviour {
-
 }

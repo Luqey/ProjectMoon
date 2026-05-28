@@ -36,12 +36,37 @@ public static class DefaultGridMovement {
     var target = startPosition + bumpDelta;
     return progress => {
       var bumpForward = progress < bumpForwardPortion;
-      transform.position = Vector3.Lerp(bumpForward ? startPosition : target, bumpForward ? target : startPosition, progress);
+      if (bumpForward) {
+        transform.position = Vector3.Lerp(startPosition, target, progress / bumpForwardPortion);
+      } else {
+        transform.position = Vector3.Lerp(target, startPosition, (progress - bumpForwardPortion) / (1f - bumpForwardPortion));
+      }
     };
   }
 
   public static Action<float> Stand(Transform transform) {
     return progress => { };
+  }
+}
+
+public class DefaultGridMovementAnimator : IGridMovementAnimator {
+  private readonly Transform transform;
+  public DefaultGridMovementAnimator(Transform t) => transform = t;
+
+  public Action<float> Bump(Vector2Int position, int facing) {
+    return DefaultGridMovement.Bump(transform, position, facing);
+  }
+
+  public Action<float> Stand() {
+    return DefaultGridMovement.Stand(transform);
+  }
+
+  public Action<float> Stride(Vector2Int from, Vector2Int to) {
+    return DefaultGridMovement.Stride(transform, from, to);
+  }
+
+  public Action<float> Turn(int from, int delta) {
+    return DefaultGridMovement.Turn(transform, from, delta);
   }
 }
 
