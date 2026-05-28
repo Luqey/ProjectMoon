@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;
-#endif
 
 [ExecuteAlways]
 public class PatchMaker : MonoBehaviour {
@@ -13,18 +12,15 @@ public class PatchMaker : MonoBehaviour {
   [SerializeField] private List<GameObject> spawnedObjects = new();
 
   void OnValidate() {
-#if UNITY_EDITOR
+    if (PrefabUtility.IsPartOfPrefabAsset(this)) return;
     EditorApplication.delayCall -= Refresh;
     EditorApplication.delayCall += Refresh;
-#endif
   }
 
   [ContextMenu("Refresh")]
   void Refresh() {
-#if UNITY_EDITOR
     EditorApplication.delayCall -= Refresh;
     if (this == null) return;
-#endif
     ClearSpawned();
     if (prefab == null || radius <= 0) return;
 
@@ -34,27 +30,16 @@ public class PatchMaker : MonoBehaviour {
     for (int x = -r; x <= r; x++) {
       for (int y = -r; y <= r; y++) {
         if (x * x + y * y > radius * radius) continue;
-        var worldPos = new Vector3(origin.x + x * gridSize, origin.y, origin.z + y * gridSize);
-#if UNITY_EDITOR
         var obj = (GameObject)PrefabUtility.InstantiatePrefab(prefab, transform);
-#else
-                var obj = Instantiate(prefab, transform);
-#endif
-        obj.transform.position = worldPos;
+        obj.transform.position = new Vector3(origin.x + x * gridSize, origin.y, origin.z + y * gridSize);
         spawnedObjects.Add(obj);
       }
     }
   }
 
   void ClearSpawned() {
-    for (var i = transform.childCount - 1; i >= 0; i -= 1) {
-      var child = transform.GetChild(i);
-      if (Application.isPlaying) {
-        Debug.Log("Should never be called");
-        Destroy(child.gameObject);
-      } else {
-        DestroyImmediate(child.gameObject);
-      }
+    for (var i = transform.childCount - 1; i >= 0; i--) {
+      DestroyImmediate(transform.GetChild(i).gameObject);
     }
     spawnedObjects.Clear();
   }
@@ -63,3 +48,6 @@ public class PatchMaker : MonoBehaviour {
     ClearSpawned();
   }
 }
+#else
+public class PatchMaker : UnityEngine.MonoBehaviour { }
+#endif

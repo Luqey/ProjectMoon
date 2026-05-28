@@ -1,11 +1,6 @@
-// Handles player and npc turns. In the player's case, wait for input to progress the turn, and npcs wait for the player's turn to start before doing their turn
-// Turns happen "simultaneously" except that players technically move first before npcs
-
-
-// All NPCs have a turn counter that counts down until their turn can happen
-
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,13 +20,12 @@ public class TurnManager : MonoBehaviour {
 
   private double lastInputTime;
   private UniTask moveChain;
+  private CancellationTokenSource cts;
   private readonly List<TurnCounterAction> turnCounters = new();
 
-  void Start() {
-
-  }
-
   void OnEnable() {
+    cts = new CancellationTokenSource();
+    moveChain = UniTask.CompletedTask;
     moveAction.action.performed += OnPlayerInput;
     moveAction.action.canceled += OnPlayerInput;
   }
@@ -39,21 +33,22 @@ public class TurnManager : MonoBehaviour {
   void OnDisable() {
     moveAction.action.performed -= OnPlayerInput;
     moveAction.action.canceled -= OnPlayerInput;
+    cts.Cancel();
+    cts.Dispose();
   }
 
   void OnPlayerInput(InputAction.CallbackContext context) {
     var input = context.ReadValue<Vector2>();
-    // Store context's time to a local variable so the anonymous function below captures it rather than the context
     var inputTime = context.time;
     lastInputTime = inputTime;
 
-    moveChain = moveChain.ContinueWith(() => ProcessTurn(input, inputTime));
+    var token = cts.Token;
+    moveChain = moveChain.ContinueWith(() => ProcessTurn(input, inputTime, token));
   }
 
-  async UniTask ProcessTurn(Vector2 direction, double inputTime) {
-    if (!enabled) return;
+  async UniTask ProcessTurn(Vector2 direction, double inputTime, CancellationToken token) {
+    token.ThrowIfCancellationRequested();
 
-    // Queue up all the things that need to process in order, now that the player has press a move button
     if (direction.sqrMagnitude > 0) {
       var outcome = playerMovementController.OnMove(direction);
       var timer = outcome switch {
@@ -83,21 +78,18 @@ public class TurnManager : MonoBehaviour {
         };
       });
 
-
       var elapsed = 0f;
       while (elapsed < timer) {
         foreach (var animator in animators) animator(elapsed / timer);
-        await UniTask.NextFrame();
+        await UniTask.NextFrame(token);
         elapsed += Time.deltaTime;
       }
       foreach (var animator in animators) animator(1f);
     }
 
-    // If the input time hasn't changed in the meantime, keep moving (button is held)
     if (direction.sqrMagnitude > 0 && lastInputTime == inputTime) {
-      await ProcessTurn(direction, inputTime);
+      await ProcessTurn(direction, inputTime, token);
     }
-    if (destroyCancellationToken.IsCancellationRequested) return;
   }
 
   public void Register(TurnCounterAction turnCounter) {

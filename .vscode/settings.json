@@ -127,5 +127,9 @@
           "yarn-comments"
         ]
       }
+    ],
+    "cSpell.enableFiletypes": [
+      "dart",
+      "yarnspinner"
     ]
 }
