@@ -1,13 +1,21 @@
-﻿{
-  "projectFileVersion": 4,
-  "sourceFiles": [
-    "**/*.yarn"
-  ],
-  "excludeFiles": [
-    "**/*~/*",
-    "./Samples/Yarn Spinner*/*"
-  ],
-  "localisation": {},
-  "baseLanguage": "en",
-  "compilerOptions": {}
+{
+    "projectFileVersion": 4,
+    "sourceFiles": [],
+    "excludeFiles": [
+        "**/*~/*",
+        "./Samples/Yarn Spinner*/*"
+    ],
+    "localisation": {},
+    "baseLanguage": "en",
+    "compilerOptions": {},
+    "editorOptions": {
+        "yarnScriptEditor": {
+            "projectGraphPositions": {
+                "TestScript.yarn": {
+                    "x": 36,
+                    "y": 100
+                }
+            }
+        }
+    }
 }

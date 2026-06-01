@@ -11,7 +11,7 @@ public static class Facing {
   public static Vector2Int SouthWest => new(-1, -1);
   public static Vector2Int West => new(-1, 0);
   public static Vector2Int NorthWest => new(-1, 1);
-  public static Vector2Int GetFacingDirection(int facing) {
+  public static Vector2Int GetDirectionFromFacing(int facing) {
 
     return Math.Mod(facing, 8) switch {
       0 => North,
@@ -24,6 +24,20 @@ public static class Facing {
       7 => NorthWest,
       _ => throw new Exception("Literally impossible!")
     };
+  }
+
+  public static int GetFacingFromDirection(Vector2Int direction) {
+    var n = new Vector2Int(Math.ZeroSign(direction.x), Math.ZeroSign(direction.y));
+    for (var i = 0; i < 8; i += 1) {
+      if (GetDirectionFromFacing(i) == n) return i;
+    }
+    throw new Exception("Can't get direction from (0, 0)");
+  }
+
+  public static int GetTurnDirection(int a, int b) {
+    int clockwise = Math.Mod(b - a, 8);
+    if (clockwise == 0) return 0;
+    return clockwise <= 4 ? 1 : -1;
   }
 
   public static int Turn(int facing, int right) {
@@ -49,7 +63,7 @@ public sealed record Stand(Vector2Int Position) : ActionOutcome(Position);
 public class GridMovementController : MonoBehaviour {
   private Vector2Int gridPosition;
   public Vector2Int Position => gridPosition;
-  private int facing;
+  public int facing { get; private set; }
 
   public int eyeHeight = 14;
 
@@ -74,7 +88,7 @@ public class GridMovementController : MonoBehaviour {
     }
     if (direction.y != 0) {
       var forward = Math.Sign(direction.y);
-      var gridDelta = Facing.GetFacingDirection(Facing.Resolve(facing, forward));
+      var gridDelta = Facing.GetDirectionFromFacing(Facing.Resolve(facing, forward));
       var eyePosition = Grid.FromGrid(gridPosition, withY: transform.position.y) + new Vector3(0, eyeHeight, 0);
       if (Physics.Raycast(eyePosition, new Vector3(gridDelta.x, 0, gridDelta.y), out var hit, Grid.size * gridDelta.magnitude, colliderMask)) {
         return new Bump(gridPosition, facing, forward, hit);

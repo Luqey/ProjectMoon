@@ -1,4 +1,12 @@
-﻿title: TestScript
+﻿title: Start
+position: -240,-200
+---
+<<jump TestScript>>
+===
+
+title: TestScript
+color: purple
+position: -240,-40
 ---
 Player: Hello world!
 NPC: Meow
@@ -6,12 +14,21 @@ NPC: Meow
 	NPC: eat something
 ->I'm angry
 	NPC: stop
-->I'm evil
+-> I'm evil
 	NPC: be nice
 	<<jump End>>
 ===
+
 title: End
+position: -140,160
 ---
 Player: ok
-NPC:Bye
+NPC: Bye
+===
+
+title: Fake
+position: -20,-40
+---
+New node
+<<jump End>>
 ===

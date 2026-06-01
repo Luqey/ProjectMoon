@@ -56,10 +56,11 @@ public class TurnManager : MonoBehaviour {
         Stride stride => strideTime,
         Bump bump => bumpTime,
         Stand => standTime,
+        _ => throw new System.Exception("Fucking explode")
       };
 
       var gameState = new GameState { playerPosition = outcome.Position };
-      var outcomes = turnCounters.Select((action) => (outcome: action.Increment(gameState), action.gameObject));
+      var outcomes = turnCounters.Select((action) => (outcome: action.Increment(gameState), action.gameObject)).ToList();
 
       var animators = new[] { (outcome, playerMovementAnimator.gameObject) }.Concat(outcomes).Select((pair) => {
         IGridMovementAnimator animator = pair.gameObject.GetComponent<GridMovementAnimator>();
@@ -69,7 +70,8 @@ public class TurnManager : MonoBehaviour {
           Turn turn => animator.Turn(turn.From, turn.Delta),
           Stride stride => animator.Stride(stride.From, stride.Position),
           Bump bump => animator.Bump(bump.Position, bump.Facing),
-          Stand => progress => { }
+          Stand => progress => { },
+          _ => throw new System.Exception("Fucking explode")
         };
       });
 
