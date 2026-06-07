@@ -73,7 +73,7 @@ public class TurnManager : MonoBehaviour {
           Stand => progress => { },
           _ => throw new System.Exception("Fucking explode")
         };
-      });
+      }).ToList();
 
       var elapsed = 0f;
       while (elapsed < timer) {

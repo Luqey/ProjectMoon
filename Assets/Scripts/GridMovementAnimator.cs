@@ -32,7 +32,7 @@ public static class DefaultGridMovement {
   public static Action<float> Bump(Transform transform, Vector2Int position, int facing) {
     var gridDelta = Facing.GetDirectionFromFacing(facing);
     var startPosition = Grid.FromGrid(position, withY: transform.position.y);
-    var bumpDelta = Vector3.Scale(Grid.FromGrid(gridDelta, withY: transform.position.y), new Vector3(bumpDistance, 1, bumpDistance));
+    var bumpDelta = Vector3.Scale(Grid.FromGrid(gridDelta), new Vector3(bumpDistance, 1, bumpDistance));
     var target = startPosition + bumpDelta;
     return progress => {
       var bumpForward = progress < bumpForwardPortion;
