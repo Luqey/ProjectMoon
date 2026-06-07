@@ -8,4 +8,5 @@ Artwork needed:
 - [ ] Keys
 - [ ] Doors
 - [ ] Walls
+- [✅] Train
 - [ ] etc.

@@ -19,8 +19,14 @@ views:
           - tasks/test.md
         todo:
           - tasks/Create more environment art.md
-          - tasks/Create new Unity project.md
           - tasks/Make a cool game.md
+          - tasks/Game Beat Sheet.md
+          - tasks/Game Macro.md
+          - tasks/Make All Camera Shift Arrow keys.md
+          - tasks/Make All Movement WASD.md
+          - tasks/Surface Detection Audio.md
+          - tasks/UI Flip-Phone Menu.md
+          - tasks/UI Item Selection Menu.md
         done:
           - tasks/Movement queuing system.md
           - tasks/Create new Unity project.md
