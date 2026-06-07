@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Math = Moon.Math;
 
-public static class Facing {
+public static class Heading {
   public static Vector2Int North => new(0, 1);
   public static Vector2Int NorthEast => new(1, 1);
   public static Vector2Int East => new(1, 0);
@@ -11,9 +11,9 @@ public static class Facing {
   public static Vector2Int SouthWest => new(-1, -1);
   public static Vector2Int West => new(-1, 0);
   public static Vector2Int NorthWest => new(-1, 1);
-  public static Vector2Int GetDirectionFromFacing(int facing) {
+  public static Vector2Int GetDirectionFromHeading(int heading) {
 
-    return Math.Mod(facing, 8) switch {
+    return Math.Mod(heading, 8) switch {
       0 => North,
       1 => NorthEast,
       2 => East,
@@ -26,10 +26,10 @@ public static class Facing {
     };
   }
 
-  public static int? GetFacingFromDirection(Vector2Int direction) {
+  public static int? GetHeadingFromDirection(Vector2Int direction) {
     var n = new Vector2Int(Math.ZeroSign(direction.x), Math.ZeroSign(direction.y));
     for (var i = 0; i < 8; i += 1) {
-      if (GetDirectionFromFacing(i) == n) return i;
+      if (GetDirectionFromHeading(i) == n) return i;
     }
     return null;
   }
@@ -40,20 +40,20 @@ public static class Facing {
     return clockwise <= 4 ? 1 : -1;
   }
 
-  public static int Turn(int facing, int right) {
-    return Math.Mod(facing + right, 8);
+  public static int Turn(int heading, int right) {
+    return Math.Mod(heading + right, 8);
   }
 
-  public static int Right(int facing, int right) {
-    return Math.Mod(facing + 2 * right, 8);
+  public static int Right(int heading, int right) {
+    return Math.Mod(heading + 2 * right, 8);
   }
 
-  public static int Reverse(int facing) {
-    return Math.Mod(facing + 4, 8);
+  public static int Reverse(int heading) {
+    return Math.Mod(heading + 4, 8);
   }
 
-  public static int Resolve(int facing, int forward) {
-    return forward >= 0 ? facing : Reverse(facing);
+  public static int Resolve(int heading, int forward) {
+    return forward >= 0 ? heading : Reverse(heading);
   }
 }
 
@@ -61,13 +61,13 @@ public static class Facing {
 public abstract record ActionOutcome(Vector2Int Position);
 public sealed record Turn(Vector2Int Position, int From, int To, int Delta) : ActionOutcome(Position);
 public sealed record Stride(Vector2Int Position, Vector2Int From) : ActionOutcome(Position);
-public sealed record Bump(Vector2Int Position, int Facing, int Forward, RaycastHit Hit) : ActionOutcome(Position);
+public sealed record Bump(Vector2Int Position, int Facing, int Heading, RaycastHit Hit) : ActionOutcome(Position);
 public sealed record Stand(Vector2Int Position) : ActionOutcome(Position);
 
 public class GridMovementController : MonoBehaviour {
   private Vector2Int gridPosition;
   public Vector2Int Position => gridPosition;
-  public int facing { get; private set; }
+  public int Facing { get; private set; }
 
   public int eyeHeight = 14;
 
@@ -76,10 +76,10 @@ public class GridMovementController : MonoBehaviour {
   void Start() {
     // Snap to grid on start
     gridPosition = Grid.ToGrid(transform.position);
-    facing = Mathf.FloorToInt(transform.rotation.eulerAngles.y / 45);
+    Facing = Mathf.FloorToInt(transform.rotation.eulerAngles.y / 45);
     transform.SetPositionAndRotation(
       Grid.FromGrid(gridPosition, withY: transform.position.y),
-      Quaternion.Euler(0, facing * 45, 0)
+      Quaternion.Euler(0, Facing * 45, 0)
     );
   }
 
@@ -87,10 +87,12 @@ public class GridMovementController : MonoBehaviour {
     if (strafe || direction.y != 0) {
       var forward = Math.ZeroSign(direction.y);
       var right = Math.ZeroSign(direction.x);
-      var gridDelta = GetStrafeDelta(forward, right);
+      var heading = GetHeading(forward, right);
+      if (!heading.HasValue) return new Stand(gridPosition);
+      var gridDelta = Heading.GetDirectionFromHeading(heading.Value);
       var eyePosition = Grid.FromGrid(gridPosition, withY: transform.position.y) + new Vector3(0, eyeHeight, 0);
       if (Physics.Raycast(eyePosition, new Vector3(gridDelta.x, 0, gridDelta.y), out var hit, Grid.size * gridDelta.magnitude, colliderMask)) {
-        return new Bump(gridPosition, facing, forward, hit);
+        return new Bump(gridPosition, Facing, heading.Value, hit);
       }
       var from = gridPosition;
       gridPosition += gridDelta;
@@ -98,18 +100,18 @@ public class GridMovementController : MonoBehaviour {
     }
 
     if (direction.x != 0) {
-      var from = facing;
+      var from = Facing;
       var right = Math.Sign(direction.x);
-      facing = Facing.Turn(facing, right);
-      return new Turn(gridPosition, from, facing, right);
+      Facing = Heading.Turn(Facing, right);
+      return new Turn(gridPosition, from, Facing, right);
     }
 
     return new Stand(gridPosition);
   }
 
-  private Vector2Int GetStrafeDelta(int forward, int right) {
-    if (forward != 0) return Facing.GetDirectionFromFacing(Facing.Resolve(facing, forward));
-    if (right != 0) return Facing.GetDirectionFromFacing(Facing.Right(facing, right));
-    return Vector2Int.zero;
+  private int? GetHeading(int forward, int right) {
+    if (forward != 0) return Heading.Resolve(Facing, forward);
+    if (right != 0) return Heading.Right(Facing, right);
+    return null;
   }
 }
