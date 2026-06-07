@@ -26,12 +26,12 @@ public static class Facing {
     };
   }
 
-  public static int GetFacingFromDirection(Vector2Int direction) {
+  public static int? GetFacingFromDirection(Vector2Int direction) {
     var n = new Vector2Int(Math.ZeroSign(direction.x), Math.ZeroSign(direction.y));
     for (var i = 0; i < 8; i += 1) {
       if (GetDirectionFromFacing(i) == n) return i;
     }
-    throw new Exception("Can't get direction from (0, 0)");
+    return null;
   }
 
   public static int GetTurnDirection(int a, int b) {
