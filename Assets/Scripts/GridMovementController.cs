@@ -44,12 +44,16 @@ public static class Facing {
     return Math.Mod(facing + right, 8);
   }
 
+  public static int Right(int facing, int right) {
+    return Math.Mod(facing + 2 * right, 8);
+  }
+
   public static int Reverse(int facing) {
     return Math.Mod(facing + 4, 8);
   }
 
   public static int Resolve(int facing, int forward) {
-    return forward > 0 ? facing : Reverse(facing);
+    return forward >= 0 ? facing : Reverse(facing);
   }
 }
 
@@ -79,26 +83,33 @@ public class GridMovementController : MonoBehaviour {
     );
   }
 
-  public ActionOutcome OnMove(Vector2 direction) {
+  public ActionOutcome OnMove(Vector2 direction, bool strafe) {
+    if (strafe || direction.y != 0) {
+      var forward = Math.ZeroSign(direction.y);
+      var right = Math.ZeroSign(direction.x);
+      var gridDelta = GetStrafeDelta(forward, right);
+      var eyePosition = Grid.FromGrid(gridPosition, withY: transform.position.y) + new Vector3(0, eyeHeight, 0);
+      if (Physics.Raycast(eyePosition, new Vector3(gridDelta.x, 0, gridDelta.y), out var hit, Grid.size * gridDelta.magnitude, colliderMask)) {
+        return new Bump(gridPosition, facing, forward, hit);
+      }
+      var from = gridPosition;
+      gridPosition += gridDelta;
+      return new Stride(gridPosition, from);
+    }
+
     if (direction.x != 0) {
       var from = facing;
       var right = Math.Sign(direction.x);
       facing = Facing.Turn(facing, right);
       return new Turn(gridPosition, from, facing, right);
     }
-    if (direction.y != 0) {
-      var forward = Math.Sign(direction.y);
-      var gridDelta = Facing.GetDirectionFromFacing(Facing.Resolve(facing, forward));
-      var eyePosition = Grid.FromGrid(gridPosition, withY: transform.position.y) + new Vector3(0, eyeHeight, 0);
-      if (Physics.Raycast(eyePosition, new Vector3(gridDelta.x, 0, gridDelta.y), out var hit, Grid.size * gridDelta.magnitude, colliderMask)) {
-        return new Bump(gridPosition, facing, forward, hit);
-      } else {
-        var from = gridPosition;
-        gridPosition += gridDelta;
-        return new Stride(gridPosition, from);
-      }
-    }
 
     return new Stand(gridPosition);
+  }
+
+  private Vector2Int GetStrafeDelta(int forward, int right) {
+    if (forward != 0) return Facing.GetDirectionFromFacing(Facing.Resolve(facing, forward));
+    if (right != 0) return Facing.GetDirectionFromFacing(Facing.Right(facing, right));
+    return Vector2Int.zero;
   }
 }

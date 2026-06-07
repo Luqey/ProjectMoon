@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class TurnManager : MonoBehaviour {
 
   [SerializeField] private InputActionReference moveAction;
+  [SerializeField] private InputActionReference strafeAction;
   [SerializeField] private GridMovementController playerMovementController;
   [SerializeField] private GridMovementAnimator playerMovementAnimator;
 
@@ -43,14 +44,14 @@ public class TurnManager : MonoBehaviour {
     lastInputTime = inputTime;
 
     var token = cts.Token;
-    moveChain = moveChain.ContinueWith(() => ProcessTurn(input, inputTime, token));
+    moveChain = moveChain.ContinueWith(() => ProcessTurn(input, strafeAction.action.IsPressed(), inputTime, token));
   }
 
-  async UniTask ProcessTurn(Vector2 direction, double inputTime, CancellationToken token) {
+  async UniTask ProcessTurn(Vector2 direction, bool strafe, double inputTime, CancellationToken token) {
     token.ThrowIfCancellationRequested();
 
     if (direction.sqrMagnitude > 0) {
-      var outcome = playerMovementController.OnMove(direction);
+      var outcome = playerMovementController.OnMove(direction, strafe);
       var timer = outcome switch {
         Turn turn => turnTime,
         Stride stride => strideTime,
@@ -85,7 +86,7 @@ public class TurnManager : MonoBehaviour {
     }
 
     if (direction.sqrMagnitude > 0 && lastInputTime == inputTime) {
-      await ProcessTurn(direction, inputTime, token);
+      await ProcessTurn(direction, strafe, inputTime, token);
     }
   }
 

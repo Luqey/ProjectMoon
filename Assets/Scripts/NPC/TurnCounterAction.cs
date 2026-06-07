@@ -23,6 +23,6 @@ public abstract class TurnCounterAction : MonoBehaviour {
       direction = TurnAction(context);
     }
     Debug.Log(name + direction);
-    return gridMovementController.OnMove(direction);
+    return gridMovementController.OnMove(direction, strafe: false);
   }
 }
