@@ -660,6 +660,116 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TrainNew_24
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 85
+        width: 56
+        height: 157
+      alignment: 9
+      pivot: {x: 0.5, y: 0.50359714}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c38c8a4e9458ac4b9548c81e17aaed0
+      internalID: -650090100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TrainNew_25
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 85
+        width: 28
+        height: 157
+      alignment: 9
+      pivot: {x: 0, y: 0.4964029}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a8d63cec7f7fef4fb385c92a3d12bd8
+      internalID: -1302381312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TrainNew_26
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 85
+        width: 2
+        height: 157
+      alignment: 9
+      pivot: {x: 0, y: 0.4964029}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04d2a1b1594048d4a8d9e3ca7b390e2a
+      internalID: 397657384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TrainNew_27
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 85
+        width: 10
+        height: 157
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4964029}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87241bb946425b84f959a1e42a33050e
+      internalID: -736420971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TrainNew_28
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 55
+        width: 56
+        height: 9
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 262e2bb6a1ed46b488b9df431778b2c9
+      internalID: 972779449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -691,6 +801,11 @@ TextureImporter:
       TrainNew_21: 1851958999
       TrainNew_22: -1571534697
       TrainNew_23: 80575851
+      TrainNew_24: -650090100
+      TrainNew_25: -1302381312
+      TrainNew_26: 397657384
+      TrainNew_27: -736420971
+      TrainNew_28: 972779449
       TrainNew_3: 5199031813119778926
       TrainNew_4: 5866062359656106546
       TrainNew_5: -7993022267157132151

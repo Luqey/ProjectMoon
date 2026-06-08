@@ -231,12 +231,12 @@ TextureImporter:
       name: GroundTilemap_5
       rect:
         serializedVersion: 2
-        x: 120
+        x: 152
         y: 8
         width: 8
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -253,12 +253,12 @@ TextureImporter:
       name: GroundTilemap_6
       rect:
         serializedVersion: 2
-        x: 128
+        x: 160
         y: 8
         width: 8
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -275,12 +275,12 @@ TextureImporter:
       name: GroundTilemap_7
       rect:
         serializedVersion: 2
-        x: 136
+        x: 168
         y: 8
         width: 8
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -297,12 +297,12 @@ TextureImporter:
       name: GroundTilemap_8
       rect:
         serializedVersion: 2
-        x: 144
+        x: 176
         y: 8
         width: 8
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -319,12 +319,12 @@ TextureImporter:
       name: GroundTilemap_9
       rect:
         serializedVersion: 2
-        x: 152
+        x: 184
         y: 8
         width: 8
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -341,12 +341,12 @@ TextureImporter:
       name: GroundTilemap_10
       rect:
         serializedVersion: 2
-        x: 160
+        x: 192
         y: 8
         width: 8
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -363,12 +363,12 @@ TextureImporter:
       name: GroundTilemap_11
       rect:
         serializedVersion: 2
-        x: 168
+        x: 200
         y: 8
         width: 8
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -385,12 +385,12 @@ TextureImporter:
       name: GroundTilemap_12
       rect:
         serializedVersion: 2
-        x: 176
+        x: 208
         y: 8
         width: 8
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -399,6 +399,72 @@ TextureImporter:
       bones: []
       spriteID: fc08a4d0ceca08a4bb307efcc639fbfe
       internalID: -294801836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundTilemap_13
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee24f3d7ebe12c046961bf6b35be448a
+      internalID: -1434124587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundTilemap_14
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 863297e1038cc044ca2023578df26f09
+      internalID: 1578803452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundTilemap_15
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43164ca68edebe74e8f73192de46788e
+      internalID: 330388935
       vertices: []
       indices: 
       edges: []
@@ -424,6 +490,9 @@ TextureImporter:
       GroundTilemap_10: 1186862819
       GroundTilemap_11: 1189519750
       GroundTilemap_12: -294801836
+      GroundTilemap_13: -1434124587
+      GroundTilemap_14: 1578803452
+      GroundTilemap_15: 330388935
       GroundTilemap_2: -425679637050809196
       GroundTilemap_3: -4175198571250937174
       GroundTilemap_4: 3123165118391308226
