@@ -84,6 +84,13 @@ public class GridMovementController : MonoBehaviour {
   }
 
   public ActionOutcome OnMove(Vector2 direction, bool strafe) {
+    if (!strafe && direction.x != 0) {
+      var from = Facing;
+      var right = Math.Sign(direction.x);
+      Facing = Heading.Turn(Facing, right);
+      return new Turn(gridPosition, from, Facing, right);
+    }
+
     if (strafe || direction.y != 0) {
       var forward = Math.ZeroSign(direction.y);
       var right = Math.ZeroSign(direction.x);
@@ -97,13 +104,6 @@ public class GridMovementController : MonoBehaviour {
       var from = gridPosition;
       gridPosition += gridDelta;
       return new Stride(gridPosition, from);
-    }
-
-    if (direction.x != 0) {
-      var from = Facing;
-      var right = Math.Sign(direction.x);
-      Facing = Heading.Turn(Facing, right);
-      return new Turn(gridPosition, from, Facing, right);
     }
 
     return new Stand(gridPosition);
