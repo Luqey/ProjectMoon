@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LightProbeUsage
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 877633110714753657, guid: 298f272a7bd1db648841a396e7fe7c10, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2095897338823490997, guid: 298f272a7bd1db648841a396e7fe7c10, type: 3}
       propertyPath: m_DynamicOccludee
       value: 0
@@ -55,6 +59,10 @@ PrefabInstance:
     - target: {fileID: 2095897338823490997, guid: 298f272a7bd1db648841a396e7fe7c10, type: 3}
       propertyPath: m_LightProbeUsage
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2095897338823490997, guid: 298f272a7bd1db648841a396e7fe7c10, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5508988576155461400, guid: 298f272a7bd1db648841a396e7fe7c10, type: 3}
       propertyPath: m_LocalPosition.x

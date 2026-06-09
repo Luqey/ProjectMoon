@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 3506950381290521348, guid: a2282ae4828f39a4c961ea7f3bc9d376, type: 3}
+  m_Sprite: {fileID: 2224227063953055625, guid: a4bf2c5f048b858498ce4de0e842fadc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -172,7 +172,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 3506950381290521348, guid: a2282ae4828f39a4c961ea7f3bc9d376, type: 3}
+  m_Sprite: {fileID: 2224227063953055625, guid: a4bf2c5f048b858498ce4de0e842fadc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 5508988576155461400}
   - component: {fileID: 5657133542264155347}
   m_Layer: 0
-  m_Name: SmallTree
+  m_Name: MedTree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
