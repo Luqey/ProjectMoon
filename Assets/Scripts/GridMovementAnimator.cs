@@ -1,6 +1,8 @@
 using System;
-using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public interface IGridMovementAnimator {
   public Action<float> Stride(Vector2Int from, Vector2Int to);
@@ -59,9 +61,62 @@ public class DefaultGridMovementAnimator : IGridMovementAnimator {
   public Action<float> Turn(int from, int delta) => DefaultGridMovement.Turn(transform, from, delta);
 }
 
+[Serializable]
+public enum MovementType {
+  Stride,
+  Turn,
+  Bump,
+  Stand,
+}
+
+[Serializable]
+public struct ThresholdAction {
+  public MovementType MovementType;
+  public float Threshold;
+  public UnityEvent Event;
+}
+
 public class GridMovementAnimator : MonoBehaviour, IGridMovementAnimator {
-  public Action<float> Stride(Vector2Int from, Vector2Int to) => DefaultGridMovement.Stride(transform, from, to);
-  public Action<float> Turn(int from, int delta) => DefaultGridMovement.Turn(transform, from, delta);
-  public Action<float> Bump(Vector2Int position, int heading, float distance) => DefaultGridMovement.Bump(transform, position, heading, distance);
-  public Action<float> Stand() => DefaultGridMovement.Stand(transform);
+  [SerializeField] private List<ThresholdAction> movementTriggers;
+
+  private List<ThresholdTrigger<float>> GetTriggers(MovementType movementType) {
+    return movementTriggers
+      .Where(trigger => trigger.MovementType == movementType)
+      .Select(trigger => new ThresholdTrigger<float>(trigger.Threshold, trigger.Event.Invoke)).ToList();
+  }
+
+  public Action<float> Stride(Vector2Int from, Vector2Int to) {
+    var triggers = GetTriggers(MovementType.Stride);
+    var f = DefaultGridMovement.Stride(transform, from, to);
+    return progress => {
+      f(progress);
+      foreach (var t in triggers) t.Update(progress);
+    };
+  }
+
+  public Action<float> Turn(int from, int delta) {
+    var triggers = GetTriggers(MovementType.Turn);
+    var f = DefaultGridMovement.Turn(transform, from, delta);
+    return progress => {
+      f(progress);
+      foreach (var t in triggers) t.Update(progress);
+    };
+  }
+  public Action<float> Bump(Vector2Int position, int heading, float distance) {
+    var triggers = GetTriggers(MovementType.Bump);
+    var f = DefaultGridMovement.Bump(transform, position, heading, distance);
+    return progress => {
+      f(progress);
+      foreach (var t in triggers) t.Update(progress);
+    };
+  }
+
+  public Action<float> Stand() {
+    var triggers = GetTriggers(MovementType.Stand);
+    var f = DefaultGridMovement.Stand(transform);
+    return progress => {
+      f(progress);
+      foreach (var t in triggers) t.Update(progress);
+    };
+  }
 }
