@@ -24,14 +24,15 @@ views:
           - tasks/Game Macro.md
           - tasks/Make All Camera Shift Arrow keys.md
           - tasks/Make All Movement WASD.md
-          - tasks/Surface Detection Audio.md
-          - tasks/UI Flip-Phone Menu.md
           - tasks/UI Item Selection Menu.md
         done:
           - tasks/Movement queuing system.md
           - tasks/Create new Unity project.md
           - tasks/Fix Bump timing.md
           - tasks/Created basic follow AI.md
+          - tasks/Added strafe key.md
+          - tasks/Fixed bump animation direction.md
+          - tasks/Surface Detection Audio.md
     columnColors:
       file.file: {}
       note.status:
