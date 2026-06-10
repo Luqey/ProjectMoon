@@ -72,6 +72,8 @@ public enum MovementType {
 [Serializable]
 public struct ThresholdAction {
   public MovementType MovementType;
+
+  [Range(0f, 1f)]
   public float Threshold;
   public UnityEvent Event;
 }
