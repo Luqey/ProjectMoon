@@ -69,13 +69,13 @@ public class GridMovementController : MonoBehaviour {
   public Vector2Int Position => gridPosition;
   public int Facing { get; private set; }
 
-  public int eyeHeight = 14;
+  public int collisionHeight = 8;
 
   [SerializeField] private LayerMask colliderMask;
 
   void Start() {
     // Snap to grid on start
-    gridPosition = Grid.ToGrid(transform.position);
+    gridPosition = Grid.RoundToGrid(transform.position);
     Facing = Mathf.FloorToInt(transform.rotation.eulerAngles.y / 45);
     transform.SetPositionAndRotation(
       Grid.FromGrid(gridPosition, withY: transform.position.y),
@@ -97,7 +97,7 @@ public class GridMovementController : MonoBehaviour {
       var heading = GetHeading(forward, right);
       if (!heading.HasValue) return new Stand(gridPosition);
       var gridDelta = Heading.GetDirectionFromHeading(heading.Value);
-      var eyePosition = Grid.FromGrid(gridPosition, withY: transform.position.y) + new Vector3(0, eyeHeight, 0);
+      var eyePosition = Grid.FromGrid(gridPosition, withY: transform.position.y) + new Vector3(0, collisionHeight, 0);
       if (Physics.Raycast(eyePosition, new Vector3(gridDelta.x, 0, gridDelta.y), out var hit, Grid.size * gridDelta.magnitude, colliderMask)) {
         return new Bump(gridPosition, Facing, heading.Value, hit);
       }

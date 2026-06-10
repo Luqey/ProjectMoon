@@ -70,7 +70,7 @@ public class TurnManager : MonoBehaviour {
         return pair.outcome switch {
           Turn turn => animator.Turn(turn.From, turn.Delta),
           Stride stride => animator.Stride(stride.From, stride.Position),
-          Bump bump => animator.Bump(bump.Position, bump.Heading),
+          Bump bump => animator.Bump(bump.Position, bump.Heading, bump.Hit.distance),
           Stand => progress => { },
           _ => throw new System.Exception("Fucking explode")
         };
