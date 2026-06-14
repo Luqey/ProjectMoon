@@ -328,7 +328,7 @@ TextureImporter:
         width: 170
         height: 130
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -337,6 +337,72 @@ TextureImporter:
       bones: []
       spriteID: e73322e8f452a1a49b392f81332740ba
       internalID: 325518095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: House_11
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 32
+        width: 16
+        height: 7
+      alignment: 9
+      pivot: {x: 1, y: -0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7811da3075468254b92f0ce713feaebe
+      internalID: 899291114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: House_12
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 38
+        width: 6
+        height: 16
+      alignment: 9
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2aa38871bdf3314dbf5baf6529d91ce
+      internalID: 1765199450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: House_13
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 32
+        width: 16
+        height: 3
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef4daa29fcde39a42be04f98bacfcf9d
+      internalID: -311679536
       vertices: []
       indices: 
       edges: []
@@ -358,6 +424,9 @@ TextureImporter:
       House_0: -7411974349392773033
       House_1: 776644691
       House_10: 325518095
+      House_11: 899291114
+      House_12: 1765199450
+      House_13: -311679536
       House_2: -377375653
       House_3: -1322284997
       House_4: -1952404134
